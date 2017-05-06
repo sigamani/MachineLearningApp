@@ -18,25 +18,25 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            // Read the Excel worksheet into a DataTable
-
-            DataTable data = new Accord.IO.CsvReader("C:\\Users\\michael\\Downloads\\JulyToOct2015Test.csv",true).ToTable();
-            DataTable table = new Accord.IO.ExcelReader("C:\\Users\\michael\\Downloads\\banking.xls").GetWorksheet("banking");
+            
+            DataTable table = new Accord.IO.CsvReader("C:\\Users\\michael\\Downloads\\JulyToOct2015Test.csv",true).ToTable();
 
             // Convert the DataTable to input and output vectors
-            double[][] inputs = table.ToJagged<double>("X", "Y");
-            int[] outputs = table.Columns["G"].ToArray<int>();
+            double[][] inputs = table.ToJagged<double>("BookToPrice", "DividendYield","DebtToEquity", "MarketBeta", "SectorID");
+            int[] outputs = table.Columns["MonthlyReturn"].ToArray<int>();
+            
 
-            // ScatterplotBox.Show("Yin-Yang", inputs, outputs).Hold();
-
-           // age job marital education   default housing loan contact month day_of_week duration campaign    pdays previous    poutcome emp_var_rate    cons_price_idx cons_conf_idx   euribor3m nr_employed
-
+            //SecurityID BookToPrice DividendYield EarningsYield   SalesGrowth AssetsToEquity  MarketCap MarketBeta  DebtToEquity    1YrVol  5YrVol  3YrVol ExposureToCurrencyGain  SectorID countryID
 
             DecisionTree tree = new DecisionTree(
                             inputs: new List<DecisionVariable>
                                 {
-                        DecisionVariable.Discrete("age",),
-                        DecisionVariable.Continuous("Y")
+                        DecisionVariable.Continuous("BookToPrice"),
+                        DecisionVariable.Continuous("DividendYield"),
+                        DecisionVariable.Continuous("DebtToEquity"),
+                        DecisionVariable.Continuous("MarketBeta"),
+                        DecisionVariable.Discrete("SectorID", 11)
+                        
                                 },
                             classes: 2);
 
@@ -47,9 +47,9 @@ namespace ConsoleApp1
 
 
             // Plot the results
-            ScatterplotBox.Show("Expected results", inputs, outputs);
-            ScatterplotBox.Show("Naive Bayes results", inputs, answers)
-                .Hold();
+           // ScatterplotBox.Show("Expected results", inputs, outputs);
+             //ScatterplotBox.Show("Ans", inputs, answers)
+            //    .Hold();
         }
     }
 }
